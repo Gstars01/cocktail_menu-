@@ -609,6 +609,12 @@
       margin-bottom: 10px;
     }
 
+    .history-order-meta-left {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
     .history-order-num {
       font-size: 0.78rem;
       font-weight: 700;
@@ -619,6 +625,24 @@
     .history-order-time {
       font-size: 0.75rem;
       color: rgba(255, 255, 255, 0.32);
+    }
+
+    .history-delete-btn {
+      background: none;
+      border: none;
+      color: rgba(255, 255, 255, 0.22);
+      font-size: 0.78rem;
+      cursor: pointer;
+      padding: 2px 6px;
+      border-radius: 6px;
+      line-height: 1;
+      transition: color 0.18s, background 0.18s;
+      font-family: inherit;
+    }
+
+    .history-delete-btn:hover {
+      color: #ff6a80;
+      background: rgba(255, 106, 128, 0.12);
     }
 
     .history-order-items {
@@ -775,7 +799,7 @@
 
         <article class="item"
           style="--accent:#ff8db6;--accent-border:rgba(255,141,182,0.26);--accent-glow:rgba(255,100,160,0.12)"
-          data-name="우우" data-alc="0%">
+          data-name="우우" data-alc="15%">
           <div class="item-image">
             <div class="glass glass-woo">
               <div class="liquid"></div><div class="straw"></div><div class="garnish"></div>
@@ -785,11 +809,10 @@
           <div class="item-content">
             <div class="item-header">
               <h2>우우</h2>
-              <span class="badge badge-nonalc">NON-ALC</span>
             </div>
-            <p>달콤하고 크리미한 감각의 무알코올 칵테일 느낌으로, 부드러운 향과 함께 편안하게 즐길 수 있습니다. 이름처럼 놀라운 여운을 남깁니다.</p>
+            <p>보드카와 복숭아 슈냅스, 크랜베리 주스가 어우러진 달콤하고 상큼한 칵테일입니다. 부드러운 복숭아 향과 새콤한 크랜베리가 조화를 이루는 매력적인 한 잔.</p>
             <div class="item-footer">
-              <span class="alc-badge"><span class="alc-dot"></span>알코올 0%</span>
+              <span class="alc-badge"><span class="alc-dot"></span>알코올 15%</span>
               <span class="item-count-badge"></span>
             </div>
           </div>
@@ -958,12 +981,22 @@
 
           el.innerHTML = `
             <div class="history-order-meta">
-              <span class="history-order-num">#${order.id}</span>
-              <span class="history-order-time">${order.time}</span>
+              <div class="history-order-meta-left">
+                <span class="history-order-num">#${order.id}</span>
+                <span class="history-order-time">${order.time}</span>
+              </div>
+              <button class="history-delete-btn" title="이 주문 삭제">✕</button>
             </div>
             <div class="history-order-items">${itemRows}</div>
             <div class="history-order-total">총 ${order.total}잔</div>
           `;
+
+          el.querySelector('.history-delete-btn').addEventListener('click', () => {
+            orderHistory = orderHistory.filter(o => o.id !== order.id);
+            saveHistory();
+            renderHistory();
+          });
+
           historyList.appendChild(el);
         });
       }
