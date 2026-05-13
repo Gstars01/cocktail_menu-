@@ -4,389 +4,543 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>칵테일 메뉴</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&family=Playfair+Display:ital@0;1&display=swap" rel="stylesheet">
   <style>
     :root {
-      color-scheme: light;
-      font-family: "Apple SD Gothic Neo", "Malgun Gothic", sans-serif;
-      background: linear-gradient(180deg, #121826 0%, #19233b 45%, #121523 100%);
-      color: #f4f4f9;
+      color-scheme: dark;
+      font-family: "Noto Sans KR", "Apple SD Gothic Neo", "Malgun Gothic", sans-serif;
     }
 
-    * {
-      box-sizing: border-box;
-    }
+    * { box-sizing: border-box; }
 
     body {
       margin: 0;
       min-height: 100vh;
       display: flex;
-      align-items: center;
+      align-items: flex-start;
       justify-content: center;
-      padding: 24px;
-      background: radial-gradient(circle at top, rgba(84, 115, 226, 0.12), transparent 35%),
-        radial-gradient(circle at left, rgba(255, 96, 140, 0.08), transparent 28%),
-        #0f1522;
+      padding: 48px 24px 64px;
+      background:
+        radial-gradient(ellipse at top, rgba(84, 115, 226, 0.18), transparent 42%),
+        radial-gradient(ellipse at bottom left, rgba(255, 96, 140, 0.12), transparent 36%),
+        #0b1120;
+      color: #f4f4f9;
     }
 
     .menu-card {
-      width: min(100%, 950px);
-      background: rgba(14, 20, 35, 0.96);
-      border: 1px solid rgba(255, 255, 255, 0.12);
-      border-radius: 30px;
+      width: min(100%, 980px);
+      margin-top: 32px;
+      background: rgba(12, 18, 32, 0.97);
+      border: 1px solid rgba(255, 255, 255, 0.09);
+      border-radius: 32px;
       overflow: hidden;
-      box-shadow: 0 32px 100px rgba(0, 0, 0, 0.35);
-      position: relative;
+      box-shadow:
+        0 40px 120px rgba(0, 0, 0, 0.5),
+        inset 0 0 0 1px rgba(255, 255, 255, 0.04);
     }
 
-    .menu-card::before {
+    /* ── Hero ── */
+    .hero {
+      position: relative;
+      padding: 52px 44px 46px;
+      background: linear-gradient(140deg, rgba(46, 74, 163, 0.32), rgba(92, 44, 138, 0.22));
+      overflow: hidden;
+    }
+
+    .hero::before {
       content: "";
       position: absolute;
       inset: 0;
-      background: radial-gradient(circle at top right, rgba(104, 111, 255, 0.14), transparent 28%),
-        radial-gradient(circle at bottom left, rgba(255, 129, 189, 0.1), transparent 26%);
+      background-image: radial-gradient(circle, rgba(255,255,255,0.16) 1px, transparent 1px);
+      background-size: 20px 20px;
+      opacity: 0.11;
       pointer-events: none;
-    }
-
-    .hero {
-      position: relative;
-      padding: 42px 34px;
-      background: linear-gradient(145deg, rgba(46, 74, 163, 0.24), rgba(92, 44, 138, 0.16));
-      backdrop-filter: blur(6px);
-      overflow: hidden;
     }
 
     .hero::after {
       content: "";
       position: absolute;
-      inset: 0;
-      background-image: radial-gradient(circle, rgba(255, 255, 255, 0.18) 1px, transparent 1px);
-      background-size: 18px 18px;
-      opacity: 0.16;
+      top: -70px; right: -50px;
+      width: 320px; height: 320px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(104, 111, 255, 0.28), transparent 70%);
       pointer-events: none;
     }
 
-    .hero h1 {
-      margin: 0;
-      font-size: clamp(2.2rem, 4vw, 3.4rem);
-      letter-spacing: 0.12em;
-      z-index: 1;
+    .hero-label {
+      font-family: "Playfair Display", serif;
+      font-style: italic;
+      font-size: 0.82rem;
+      letter-spacing: 0.2em;
+      color: rgba(255, 255, 255, 0.45);
+      margin: 0 0 10px;
       position: relative;
+      z-index: 1;
     }
 
+    .hero h1 {
+      margin: 0 0 12px;
+      font-size: clamp(2.4rem, 4.5vw, 3.6rem);
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      background: linear-gradient(130deg, #ffffff 0%, #c8d4ff 50%, #e8b4ff 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      position: relative;
+      z-index: 1;
+    }
+
+    .hero-sub {
+      margin: 0;
+      font-size: 0.98rem;
+      color: rgba(255, 255, 255, 0.42);
+      font-weight: 300;
+      letter-spacing: 0.04em;
+      position: relative;
+      z-index: 1;
+    }
+
+    /* ── Layout ── */
     .menu-body {
       display: grid;
-      grid-template-columns: minmax(0, 1.4fr) minmax(280px, 1fr);
-      gap: 24px;
-      padding: 0 32px 32px;
+      grid-template-columns: minmax(0, 1.5fr) minmax(260px, 1fr);
+      gap: 28px;
+      padding: 28px 32px 36px;
     }
 
     .menu-list {
       display: grid;
-      gap: 24px;
+      gap: 18px;
     }
 
+    /* ── Item card ── */
     .item {
       display: grid;
-      grid-template-columns: 150px 1fr;
+      grid-template-columns: 140px 1fr;
       gap: 22px;
-      padding: 24px;
-      border-radius: 26px;
-      background: rgba(255, 255, 255, 0.03);
-      border: 1px solid rgba(255, 255, 255, 0.08);
+      padding: 20px 22px;
+      border-radius: 24px;
+      background: rgba(255, 255, 255, 0.028);
+      border: 1px solid rgba(255, 255, 255, 0.07);
       align-items: center;
       position: relative;
       overflow: hidden;
       cursor: pointer;
-      transition: transform 0.25s ease, border-color 0.25s ease, background 0.25s ease;
+      transition:
+        transform 0.28s cubic-bezier(0.34, 1.56, 0.64, 1),
+        border-color 0.25s ease,
+        background 0.25s ease,
+        box-shadow 0.25s ease;
+      animation: fadeSlideIn 0.5s ease both;
     }
 
-    .item:hover,
-    .item.active {
-      transform: translateY(-2px);
-      border-color: rgba(255, 255, 255, 0.16);
-      background: rgba(255, 255, 255, 0.07);
-    }
+    .item:nth-child(1) { animation-delay: 0.05s; }
+    .item:nth-child(2) { animation-delay: 0.12s; }
+    .item:nth-child(3) { animation-delay: 0.19s; }
+    .item:nth-child(4) { animation-delay: 0.26s; }
+    .item:nth-child(5) { animation-delay: 0.33s; }
 
     .item::before {
       content: "";
       position: absolute;
-      inset: 0;
-      background: linear-gradient(180deg, rgba(255, 255, 255, 0.02), transparent 40%);
-      pointer-events: none;
+      left: 0; top: 0; bottom: 0;
+      width: 3px;
+      border-radius: 3px 0 0 3px;
+      background: var(--accent, rgba(255, 255, 255, 0.3));
+      opacity: 0;
+      transition: opacity 0.25s ease;
     }
 
+    .item:hover {
+      transform: translateY(-3px);
+      border-color: rgba(255, 255, 255, 0.13);
+      background: rgba(255, 255, 255, 0.052);
+      box-shadow: 0 14px 42px rgba(0, 0, 0, 0.28);
+    }
+
+    .item.active {
+      transform: translateY(-3px);
+      border-color: var(--accent-border, rgba(255, 255, 255, 0.2));
+      background: rgba(255, 255, 255, 0.068);
+      box-shadow: 0 8px 36px var(--accent-glow, rgba(255, 255, 255, 0.08));
+    }
+
+    .item.active::before { opacity: 1; }
+
+    /* ── Item image ── */
     .item-image {
-      width: 150px;
-      height: 150px;
-      border-radius: 28px;
-      background: radial-gradient(circle at 30% 30%, rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0.04) 42%),
-        linear-gradient(180deg, #1f2f51 0%, #101623 100%);
+      width: 140px; height: 140px;
+      border-radius: 22px;
+      background:
+        radial-gradient(circle at 30% 30%, rgba(255,255,255,0.18), rgba(255,255,255,0.04) 42%),
+        linear-gradient(180deg, #1a2a48 0%, #0d1422 100%);
       display: flex;
       align-items: center;
       justify-content: center;
       position: relative;
       overflow: hidden;
-      box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.08);
-      padding: 18px;
+      box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.07);
+      padding: 16px;
+      flex-shrink: 0;
     }
 
     .item-image::before {
       content: "";
       position: absolute;
       inset: 0;
-      background: radial-gradient(circle at 14% 18%, rgba(255, 255, 255, 0.26), transparent 28%);
+      background: radial-gradient(circle at 14% 18%, rgba(255,255,255,0.22), transparent 28%);
     }
 
+    /* ── Glass ── */
     .glass {
       position: relative;
-      width: 90px;
-      height: 112px;
-      border-radius: 0 0 24px 24px;
+      width: 84px; height: 106px;
+      border-radius: 0 0 22px 22px;
       border: 2px solid rgba(255, 255, 255, 0.18);
       background: rgba(255, 255, 255, 0.08);
       overflow: hidden;
-      box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.08), 0 18px 30px rgba(0, 0, 0, 0.2);
+      box-shadow: inset 0 0 0 1px rgba(255,255,255,0.07), 0 16px 28px rgba(0,0,0,0.22);
     }
 
     .glass::before {
       content: "";
       position: absolute;
-      top: -20px;
-      left: 50%;
+      top: -19px; left: 50%;
       transform: translateX(-50%);
-      width: 44px;
-      height: 30px;
-      border-radius: 22px 22px 0 0;
-      background: rgba(255, 255, 255, 0.15);
-      box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.1);
+      width: 42px; height: 28px;
+      border-radius: 20px 20px 0 0;
+      background: rgba(255, 255, 255, 0.14);
+      box-shadow: inset 0 0 0 1px rgba(255,255,255,0.1);
     }
 
     .glass::after {
       content: "";
       position: absolute;
-      top: -22px;
-      left: 50%;
+      top: -20px; left: 50%;
       transform: translateX(-50%);
-      width: 12px;
-      height: 24px;
-      border-radius: 10px;
-      background: rgba(255, 255, 255, 0.25);
+      width: 11px; height: 22px;
+      border-radius: 9px;
+      background: rgba(255, 255, 255, 0.22);
     }
 
     .liquid {
       position: absolute;
-      left: 0;
-      right: 0;
-      bottom: 0;
+      left: 0; right: 0; bottom: 0;
       height: 64%;
-      border-top-left-radius: 20px;
-      border-top-right-radius: 20px;
-      box-shadow: inset 0 14px 16px rgba(0, 0, 0, 0.22);
+      border-top-left-radius: 18px;
+      border-top-right-radius: 18px;
+      box-shadow: inset 0 12px 16px rgba(0,0,0,0.2);
     }
 
     .straw {
       position: absolute;
-      top: 12px;
-      right: 10px;
-      width: 8px;
-      height: 74px;
-      border-radius: 6px;
+      top: 10px; right: 9px;
+      width: 7px; height: 68px;
+      border-radius: 5px;
       transform: rotate(-14deg);
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.24);
+      box-shadow: 0 4px 10px rgba(0,0,0,0.22);
     }
 
     .garnish {
       position: absolute;
-      top: 18px;
-      left: 12px;
-      width: 28px;
-      height: 28px;
+      top: 16px; left: 10px;
+      width: 26px; height: 26px;
       border-radius: 50%;
-      box-shadow: inset 0 0 0 2px rgba(255, 255, 255, 0.18);
+      box-shadow: inset 0 0 0 2px rgba(255,255,255,0.18);
       opacity: 0.95;
     }
 
     .bubble {
       position: absolute;
-      width: 10px;
-      height: 10px;
+      width: 9px; height: 9px;
       border-radius: 50%;
-      background: rgba(255, 255, 255, 0.24);
-      box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.18);
+      background: rgba(255, 255, 255, 0.22);
+      box-shadow: inset 0 0 0 1px rgba(255,255,255,0.16);
       animation: float 4s ease-in-out infinite;
     }
 
-    .bubble-1 { top: 30px; left: 18px; animation-delay: 0s; }
-    .bubble-2 { top: 54px; right: 16px; animation-delay: 0.8s; }
-    .bubble-3 { top: 74px; left: 26px; animation-delay: 1.6s; }
+    .bubble-1 { top: 28px; left: 16px; animation-delay: 0s; }
+    .bubble-2 { top: 50px; right: 14px; animation-delay: 0.8s; }
+    .bubble-3 { top: 70px; left: 22px; animation-delay: 1.6s; }
 
-    .glass-screwdriver .liquid {
-      background: linear-gradient(180deg, #ffe67e 0%, #ff9b38 100%);
-    }
+    /* ── Cocktail colors ── */
+    .glass-screwdriver .liquid { background: linear-gradient(180deg, #ffe67e 0%, #ff9b38 100%); }
+    .glass-screwdriver .straw  { background: linear-gradient(180deg, #ffb974 0%, #e04f1d 100%); }
+    .glass-screwdriver .garnish{ background: radial-gradient(circle at 30% 30%, #fff3b8 0%, #ffb65d 65%); }
 
-    .glass-screwdriver .straw {
-      background: linear-gradient(180deg, #ffb974 0%, #e04f1d 100%);
-    }
+    .glass-sunrise .liquid { background: linear-gradient(180deg, #ffd988 0%, #ff6a80 45%, #9e4cab 100%); }
+    .glass-sunrise .straw  { background: linear-gradient(180deg, #ff839f 0%, #ffd4b1 100%); }
+    .glass-sunrise .garnish{ background: radial-gradient(circle at 30% 30%, #ffe7d5 0%, #ff8b9c 65%); }
 
-    .glass-screwdriver .garnish {
-      background: radial-gradient(circle at 30% 30%, #fff3b8 0%, #ffb65d 65%);
-    }
+    .glass-sky .liquid { background: linear-gradient(180deg, #ff9bb1 0%, #d63956 100%); }
+    .glass-sky .straw  { background: linear-gradient(180deg, #fca7c8 0%, #d83a63 100%); }
+    .glass-sky .garnish{ background: radial-gradient(circle at 30% 30%, #ffdade 0%, #f97398 70%); }
 
-    .glass-sunrise .liquid {
-      background: linear-gradient(180deg, #ffd988 0%, #ff6a80 45%, #9e4cab 100%);
-    }
+    .glass-beach .liquid { background: linear-gradient(180deg, #ffe4a1 0%, #ff958b 45%, #b94fab 100%); }
+    .glass-beach .straw  { background: linear-gradient(180deg, #ff9c87 0%, #ffdcbe 100%); }
+    .glass-beach .garnish{ background: radial-gradient(circle at 30% 30%, #fff2d8 0%, #ffb585 65%); }
 
-    .glass-sunrise .straw {
-      background: linear-gradient(180deg, #ff839f 0%, #ffd4b1 100%);
-    }
+    .glass-woo .liquid { background: linear-gradient(180deg, #ff8db6 0%, #ff5c8b 55%, #d72f67 100%); }
+    .glass-woo .straw  { background: linear-gradient(180deg, #ff9bb5 0%, #ffcad7 100%); }
+    .glass-woo .garnish{ background: radial-gradient(circle at 30% 30%, #ffdce6 0%, #ff9cb3 70%); }
 
-    .glass-sunrise .garnish {
-      background: radial-gradient(circle at 30% 30%, #ffe7d5 0%, #ff8b9c 65%);
-    }
+    /* ── Item content ── */
+    .item-content { min-width: 0; }
 
-    .glass-sky .liquid {
-      background: linear-gradient(180deg, #ff9bb1 0%, #d63956 100%);
-    }
-
-    .glass-sky .straw {
-      background: linear-gradient(180deg, #fca7c8 0%, #d83a63 100%);
-    }
-
-    .glass-sky .garnish {
-      background: radial-gradient(circle at 30% 30%, #ffdade 0%, #f97398 70%);
-    }
-
-    .glass-beach .liquid {
-      background: linear-gradient(180deg, #ffe4a1 0%, #ff958b 45%, #b94fab 100%);
-    }
-
-    .glass-beach .straw {
-      background: linear-gradient(180deg, #ff9c87 0%, #ffdcbe 100%);
-    }
-
-    .glass-beach .garnish {
-      background: radial-gradient(circle at 30% 30%, #fff2d8 0%, #ffb585 65%);
-    }
-
-    .glass-woo .liquid {
-      background: linear-gradient(180deg, #ff8db6 0%, #ff5c8b 55%, #d72f67 100%);
-    }
-
-    .glass-woo .straw {
-      background: linear-gradient(180deg, #ff9bb5 0%, #ffcad7 100%);
-    }
-
-    .glass-woo .garnish {
-      background: radial-gradient(circle at 30% 30%, #ffdce6 0%, #ff9cb3 70%);
+    .item-header {
+      display: flex;
+      align-items: baseline;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-bottom: 8px;
     }
 
     .item-content h2 {
-      margin: 0 0 10px;
-      font-size: 1.46rem;
-    }
-
-    .item-content p {
       margin: 0;
-      line-height: 1.75;
-      color: #d7dae2;
-      font-size: 1rem;
-    }
-
-    .item-meta {
-      margin-top: 14px;
-      color: #b3bad1;
-      font-size: 0.94rem;
+      font-size: 1.35rem;
+      font-weight: 700;
       letter-spacing: 0.01em;
     }
 
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      padding: 2px 9px;
+      border-radius: 999px;
+      font-size: 0.68rem;
+      font-weight: 700;
+      letter-spacing: 0.07em;
+      flex-shrink: 0;
+      border: 1px solid rgba(255,255,255,0.12);
+      background: rgba(255,255,255,0.08);
+      color: rgba(255,255,255,0.65);
+    }
+
+    .badge-nonalc {
+      background: rgba(120, 210, 150, 0.14);
+      color: #7ed4a0;
+      border-color: rgba(120, 210, 150, 0.28);
+    }
+
+    .item-content p {
+      margin: 0 0 14px;
+      line-height: 1.74;
+      color: #c4c9d6;
+      font-size: 0.93rem;
+      font-weight: 300;
+    }
+
+    .item-footer {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .alc-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 4px 12px;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.055);
+      border: 1px solid rgba(255, 255, 255, 0.09);
+      font-size: 0.8rem;
+      color: #b0b8cc;
+      font-weight: 500;
+    }
+
+    .alc-dot {
+      width: 7px; height: 7px;
+      border-radius: 50%;
+      background: var(--accent, rgba(255,255,255,0.4));
+      flex-shrink: 0;
+    }
+
+    .item-count-badge {
+      display: none;
+      padding: 4px 12px;
+      border-radius: 999px;
+      background: var(--accent-border, rgba(255,255,255,0.15));
+      color: #fff;
+      font-size: 0.8rem;
+      font-weight: 700;
+    }
+
+    .item.active .item-count-badge { display: inline-block; }
+
+    /* ── Basket ── */
     .basket {
       display: flex;
       align-items: flex-start;
-      justify-content: center;
-      padding-top: 32px;
     }
 
     .basket-card {
       width: 100%;
-      background: rgba(255, 255, 255, 0.05);
+      background: rgba(255, 255, 255, 0.038);
       border: 1px solid rgba(255, 255, 255, 0.08);
-      border-radius: 26px;
-      padding: 44px 24px 24px;
-      box-shadow: 0 18px 40px rgba(0, 0, 0, 0.18);
-      backdrop-filter: blur(12px);
+      border-radius: 24px;
+      padding: 24px;
+      box-shadow: 0 16px 40px rgba(0, 0, 0, 0.18);
+      backdrop-filter: blur(14px);
       min-height: 360px;
+      display: flex;
+      flex-direction: column;
+      position: sticky;
+      top: 24px;
+    }
+
+    .basket-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 20px;
     }
 
     .basket-card h2 {
-      margin: 0 0 18px;
-      font-size: 1.4rem;
-      letter-spacing: 0.04em;
+      margin: 0;
+      font-size: 1.25rem;
+      font-weight: 700;
+      letter-spacing: 0.03em;
     }
 
+    .basket-total-badge {
+      display: none;
+      padding: 4px 13px;
+      border-radius: 999px;
+      background: rgba(104, 111, 255, 0.18);
+      border: 1px solid rgba(104, 111, 255, 0.3);
+      color: #a8adff;
+      font-size: 0.82rem;
+      font-weight: 700;
+    }
+
+    .basket-total-badge.visible { display: block; }
+
     .basket-empty {
-      color: #a7b1c9;
-      line-height: 1.8;
-      font-size: 1rem;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      color: #6e7a90;
+      font-size: 0.93rem;
+      text-align: center;
       padding: 24px 0;
     }
 
-    .basket-items {
-      display: grid;
-      gap: 14px;
+    .basket-empty-icon {
+      font-size: 2.6rem;
+      opacity: 0.45;
+      line-height: 1;
     }
 
-    .basket-item.hidden,
-    .basket-items.hidden {
-      display: none !important;
+    .basket-empty.hidden { display: none !important; }
+
+    .basket-items {
+      display: grid;
+      gap: 10px;
+      flex: 1;
     }
+
+    .basket-items.hidden { display: none !important; }
 
     .basket-row {
       display: flex;
       align-items: center;
       justify-content: space-between;
       gap: 12px;
-      padding: 14px 16px;
+      padding: 12px 14px;
       background: rgba(255, 255, 255, 0.04);
-      border: 1px solid rgba(255, 255, 255, 0.08);
-      border-radius: 18px;
+      border: 1px solid rgba(255, 255, 255, 0.07);
+      border-radius: 16px;
       cursor: pointer;
-      transition: background 0.2s ease;
+      transition: background 0.2s ease, border-color 0.2s ease;
     }
 
     .basket-row:hover {
-      background: rgba(255, 255, 255, 0.08);
+      background: rgba(255, 70, 90, 0.1);
+      border-color: rgba(255, 70, 90, 0.2);
     }
 
     .basket-row h4 {
       margin: 0;
-      font-size: 1rem;
+      font-size: 0.96rem;
       line-height: 1.3;
-      color: #f4f4f9;
+      color: #f0f2f8;
+      font-weight: 500;
+    }
+
+    .basket-row-hint {
+      font-size: 0.72rem;
+      color: rgba(255, 255, 255, 0.32);
+      margin-top: 2px;
     }
 
     .basket-count {
-      min-width: 40px;
+      min-width: 36px;
       text-align: center;
-      padding: 6px 10px;
+      padding: 5px 10px;
       border-radius: 999px;
-      background: rgba(255, 255, 255, 0.1);
+      background: rgba(255, 255, 255, 0.09);
       color: #fff;
-      font-size: 0.95rem;
+      font-size: 0.88rem;
       font-weight: 700;
+      flex-shrink: 0;
     }
 
-    .footer {
+    .order-btn {
       display: none;
+      width: 100%;
+      margin-top: 18px;
+      padding: 14px;
+      border-radius: 16px;
+      border: none;
+      background: linear-gradient(135deg, #5473e2 0%, #8b4fcc 100%);
+      color: #fff;
+      font-size: 1rem;
+      font-weight: 700;
+      letter-spacing: 0.05em;
+      cursor: pointer;
+      transition: opacity 0.2s ease, transform 0.2s ease;
+      font-family: inherit;
+      box-shadow: 0 8px 24px rgba(84, 115, 226, 0.28);
     }
 
+    .order-btn:hover {
+      opacity: 0.88;
+      transform: translateY(-1px);
+    }
+
+    .order-btn.visible { display: block; }
+
+    /* ── Animations ── */
     @keyframes float {
-      0%, 100% { transform: translateY(0); opacity: 0.9; }
-      50% { transform: translateY(-10px); opacity: 0.5; }
+      0%, 100% { transform: translateY(0); opacity: 0.85; }
+      50%       { transform: translateY(-9px); opacity: 0.42; }
     }
 
+    @keyframes fadeSlideIn {
+      from { opacity: 0; transform: translateY(18px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ── Responsive ── */
     @media (max-width: 720px) {
       .menu-body {
         grid-template-columns: 1fr;
+        padding: 20px 20px 28px;
+      }
+
+      .basket { order: -1; }
+
+      .basket-card {
+        position: static;
+        min-height: auto;
       }
 
       .item {
@@ -394,128 +548,145 @@
         text-align: center;
       }
 
-      .item-image {
-        margin: 0 auto;
-      }
-
-      .item-content {
-        text-align: left;
-      }
+      .item-image { margin: 0 auto; }
+      .item-content { text-align: left; }
+      .item-header { justify-content: flex-start; }
     }
   </style>
 </head>
 <body>
   <article class="menu-card">
     <section class="hero">
+      <p class="hero-label">Cocktail Bar &amp; Lounge</p>
       <h1>칵테일 메뉴</h1>
+      <p class="hero-sub">마음에 드는 칵테일을 눌러 담아보세요</p>
     </section>
 
     <section class="menu-body">
       <div class="menu-list">
-        <article class="item" data-name="스크류드라이버" data-desc="상큼한 오렌지 주스와 부드러운 보드카가 어우러진 클래식 칵테일입니다. 언제나 부담 없이 즐기기 좋은 깔끔한 맛." data-alc="12%" data-color="#ffe27e" data-straw="#ffb974" data-garnish="#fff3b8">
+
+        <article class="item"
+          style="--accent:#ffe27e;--accent-border:rgba(255,226,126,0.26);--accent-glow:rgba(255,200,80,0.12)"
+          data-name="스크류드라이버" data-alc="12%">
           <div class="item-image">
             <div class="glass glass-screwdriver">
-              <div class="liquid"></div>
-              <div class="straw"></div>
-              <div class="garnish"></div>
-              <div class="bubble bubble-1"></div>
-              <div class="bubble bubble-2"></div>
-              <div class="bubble bubble-3"></div>
+              <div class="liquid"></div><div class="straw"></div><div class="garnish"></div>
+              <div class="bubble bubble-1"></div><div class="bubble bubble-2"></div><div class="bubble bubble-3"></div>
             </div>
           </div>
           <div class="item-content">
-            <h2>스크류드라이버</h2>
+            <div class="item-header"><h2>스크류드라이버</h2></div>
             <p>상큼한 오렌지 주스와 부드러운 보드카가 어우러진 클래식 칵테일입니다. 언제나 부담 없이 즐기기 좋은 깔끔한 맛.</p>
-            <div class="item-meta">알코올 도수: 12%</div>
+            <div class="item-footer">
+              <span class="alc-badge"><span class="alc-dot"></span>알코올 12%</span>
+              <span class="item-count-badge"></span>
+            </div>
           </div>
         </article>
 
-        <article class="item" data-name="보드카 선라이즈" data-desc="붉은 선라이즈처럼 오렌지와 크랜베리, 보드카가 층을 이루는 시각적 매력이 뛰어난 칵테일입니다. 달콤하고 상큼한 균형이 인상적입니다." data-alc="14%" data-color="#ffaf62" data-straw="#ff839f" data-garnish="#ffe7d5">
+        <article class="item"
+          style="--accent:#ffaf62;--accent-border:rgba(255,175,98,0.26);--accent-glow:rgba(255,150,60,0.12)"
+          data-name="보드카 선라이즈" data-alc="14%">
           <div class="item-image">
             <div class="glass glass-sunrise">
-              <div class="liquid"></div>
-              <div class="straw"></div>
-              <div class="garnish"></div>
-              <div class="bubble bubble-1"></div>
-              <div class="bubble bubble-2"></div>
-              <div class="bubble bubble-3"></div>
+              <div class="liquid"></div><div class="straw"></div><div class="garnish"></div>
+              <div class="bubble bubble-1"></div><div class="bubble bubble-2"></div><div class="bubble bubble-3"></div>
             </div>
           </div>
           <div class="item-content">
-            <h2>보드카 선라이즈</h2>
+            <div class="item-header"><h2>보드카 선라이즈</h2></div>
             <p>붉은 선라이즈처럼 오렌지와 크랜베리, 보드카가 층을 이루는 시각적 매력이 뛰어난 칵테일입니다. 달콤하고 상큼한 균형이 인상적입니다.</p>
-            <div class="item-meta">알코올 도수: 14%</div>
+            <div class="item-footer">
+              <span class="alc-badge"><span class="alc-dot"></span>알코올 14%</span>
+              <span class="item-count-badge"></span>
+            </div>
           </div>
         </article>
 
-        <article class="item" data-name="스카이 크렌베리" data-desc="보드카를 베이스로 한 크랜베리 주스 칵테일로, 맑고 상큼한 붉은빛이 매력적입니다. 가볍고 청량한 음료감을 자랑합니다." data-alc="11%" data-color="#ff8fa5" data-straw="#fca7c8" data-garnish="#ffd9e4">
+        <article class="item"
+          style="--accent:#ff8fa5;--accent-border:rgba(255,143,165,0.26);--accent-glow:rgba(255,100,130,0.12)"
+          data-name="스카이 크렌베리" data-alc="11%">
           <div class="item-image">
             <div class="glass glass-sky">
-              <div class="liquid"></div>
-              <div class="straw"></div>
-              <div class="garnish"></div>
-              <div class="bubble bubble-1"></div>
-              <div class="bubble bubble-2"></div>
-              <div class="bubble bubble-3"></div>
+              <div class="liquid"></div><div class="straw"></div><div class="garnish"></div>
+              <div class="bubble bubble-1"></div><div class="bubble bubble-2"></div><div class="bubble bubble-3"></div>
             </div>
           </div>
           <div class="item-content">
-            <h2>스카이 크렌베리</h2>
+            <div class="item-header"><h2>스카이 크렌베리</h2></div>
             <p>보드카를 베이스로 한 크랜베리 주스 칵테일로, 맑고 상큼한 붉은빛이 매력적입니다. 가볍고 청량한 음료감을 자랑합니다.</p>
-            <div class="item-meta">알코올 도수: 11%</div>
+            <div class="item-footer">
+              <span class="alc-badge"><span class="alc-dot"></span>알코올 11%</span>
+              <span class="item-count-badge"></span>
+            </div>
           </div>
         </article>
 
-        <article class="item" data-name="섹스온더비치" data-desc="달콤한 복숭아와 크랜베리 주스, 보드카가 어우러진 트로피컬 칵테일입니다. 휴양지 분위기를 느끼기 좋은 부드러운 맛입니다." data-alc="14%" data-color="#ffe4a1" data-straw="#ff9c87" data-garnish="#fff2d8">
+        <article class="item"
+          style="--accent:#ffe4a1;--accent-border:rgba(255,228,161,0.26);--accent-glow:rgba(255,200,120,0.12)"
+          data-name="섹스온더비치" data-alc="14%">
           <div class="item-image">
             <div class="glass glass-beach">
-              <div class="liquid"></div>
-              <div class="straw"></div>
-              <div class="garnish"></div>
-              <div class="bubble bubble-1"></div>
-              <div class="bubble bubble-2"></div>
-              <div class="bubble bubble-3"></div>
+              <div class="liquid"></div><div class="straw"></div><div class="garnish"></div>
+              <div class="bubble bubble-1"></div><div class="bubble bubble-2"></div><div class="bubble bubble-3"></div>
             </div>
           </div>
           <div class="item-content">
-            <h2>섹스온더비치</h2>
+            <div class="item-header"><h2>섹스온더비치</h2></div>
             <p>달콤한 복숭아와 크랜베리 주스, 보드카가 어우러진 트로피컬 칵테일입니다. 휴양지 분위기를 느끼기 좋은 부드러운 맛입니다.</p>
-            <div class="item-meta">알코올 도수: 14%</div>
+            <div class="item-footer">
+              <span class="alc-badge"><span class="alc-dot"></span>알코올 14%</span>
+              <span class="item-count-badge"></span>
+            </div>
           </div>
         </article>
 
-        <article class="item" data-name="우우" data-desc="달콤하고 크리미한 감각의 무알코올 칵테일 느낌으로, 부드러운 향과 함께 편안하게 즐길 수 있습니다. 이름처럼 놀라운 여운을 남깁니다." data-alc="0%" data-color="#ff8db6" data-straw="#ff9bb5" data-garnish="#ffdce6">
+        <article class="item"
+          style="--accent:#ff8db6;--accent-border:rgba(255,141,182,0.26);--accent-glow:rgba(255,100,160,0.12)"
+          data-name="우우" data-alc="0%">
           <div class="item-image">
             <div class="glass glass-woo">
-              <div class="liquid"></div>
-              <div class="straw"></div>
-              <div class="garnish"></div>
-              <div class="bubble bubble-1"></div>
-              <div class="bubble bubble-2"></div>
-              <div class="bubble bubble-3"></div>
+              <div class="liquid"></div><div class="straw"></div><div class="garnish"></div>
+              <div class="bubble bubble-1"></div><div class="bubble bubble-2"></div><div class="bubble bubble-3"></div>
             </div>
           </div>
           <div class="item-content">
-            <h2>우우</h2>
+            <div class="item-header">
+              <h2>우우</h2>
+              <span class="badge badge-nonalc">NON-ALC</span>
+            </div>
             <p>달콤하고 크리미한 감각의 무알코올 칵테일 느낌으로, 부드러운 향과 함께 편안하게 즐길 수 있습니다. 이름처럼 놀라운 여운을 남깁니다.</p>
-            <div class="item-meta">알코올 도수: 0%</div>
+            <div class="item-footer">
+              <span class="alc-badge"><span class="alc-dot"></span>알코올 0%</span>
+              <span class="item-count-badge"></span>
+            </div>
           </div>
         </article>
+
       </div>
 
       <aside class="basket">
         <div class="basket-card">
-          <h2>선택한 칵테일</h2>
-          <div class="basket-empty">메뉴를 눌러 오른쪽에 담아보세요.</div>
-          <div class="basket-items hidden"></div>
+          <div class="basket-header">
+            <h2>선택한 칵테일</h2>
+            <span class="basket-total-badge" id="totalBadge"></span>
+          </div>
+          <div class="basket-empty" id="basketEmpty">
+            <div class="basket-empty-icon">🍹</div>
+            <span>메뉴를 눌러 담아보세요</span>
+          </div>
+          <div class="basket-items hidden" id="basketItems"></div>
+          <button class="order-btn" id="orderBtn">주문하기</button>
         </div>
       </aside>
     </section>
 
     <script>
       const items = document.querySelectorAll('.item');
-      const basketEmpty = document.querySelector('.basket-empty');
-      const basketItems = document.querySelector('.basket-items');
+      const basketEmpty = document.getElementById('basketEmpty');
+      const basketItems = document.getElementById('basketItems');
+      const totalBadge = document.getElementById('totalBadge');
+      const orderBtn = document.getElementById('orderBtn');
       const storageKey = 'cocktailBasket';
       const basketData = {};
 
@@ -523,22 +694,32 @@
         localStorage.setItem(storageKey, JSON.stringify(basketData));
       }
 
+      function getTotalCount() {
+        return Object.values(basketData).reduce((sum, v) => sum + v, 0);
+      }
+
       function renderBasket() {
         basketItems.innerHTML = '';
         const names = Object.keys(basketData);
+        const total = getTotalCount();
+
         if (!names.length) {
           basketEmpty.classList.remove('hidden');
           basketItems.classList.add('hidden');
+          totalBadge.classList.remove('visible');
+          orderBtn.classList.remove('visible');
           return;
         }
 
         basketEmpty.classList.add('hidden');
         basketItems.classList.remove('hidden');
+        totalBadge.textContent = `총 ${total}잔`;
+        totalBadge.classList.add('visible');
+        orderBtn.classList.add('visible');
 
         names.forEach(name => {
-          const item = document.querySelector(`.item[data-name="${name}"]`);
           const count = basketData[name] || 0;
-          if (!item || count <= 0) return;
+          if (count <= 0) return;
 
           const row = document.createElement('div');
           row.className = 'basket-row';
@@ -546,6 +727,7 @@
           row.innerHTML = `
             <div>
               <h4>${name}</h4>
+              <div class="basket-row-hint">눌러서 1개 제거</div>
             </div>
             <div class="basket-count">${count}</div>
           `;
@@ -558,30 +740,22 @@
         items.forEach(item => {
           const count = basketData[item.dataset.name] || 0;
           item.classList.toggle('active', count > 0);
-          const meta = item.querySelector('.item-meta');
-          if (count > 0) {
-            meta.textContent = `알코올 도수: ${item.dataset.alc} · ${count}개 담김`;
-          } else {
-            meta.textContent = `알코올 도수: ${item.dataset.alc}`;
-          }
+          const badge = item.querySelector('.item-count-badge');
+          badge.textContent = count > 0 ? `${count}개 담김` : '';
         });
       }
 
       function loadBasket() {
         try {
-          const stored = JSON.parse(localStorage.getItem(storageKey) || '{}');
-          Object.assign(basketData, stored);
-        } catch {
-          Object.assign(basketData, {});
-        }
+          Object.assign(basketData, JSON.parse(localStorage.getItem(storageKey) || '{}'));
+        } catch { /* ignore */ }
         renderBasket();
         updateItemStates();
       }
 
       function addCocktail(item) {
         const name = item.dataset.name;
-        const current = basketData[name] || 0;
-        basketData[name] = current + 1;
+        basketData[name] = (basketData[name] || 0) + 1;
         saveBasket();
         renderBasket();
         updateItemStates();
@@ -589,11 +763,8 @@
 
       function removeCocktail(name) {
         const current = basketData[name] || 0;
-        if (current <= 1) {
-          delete basketData[name];
-        } else {
-          basketData[name] = current - 1;
-        }
+        if (current <= 1) delete basketData[name];
+        else basketData[name] = current - 1;
         saveBasket();
         renderBasket();
         updateItemStates();
@@ -601,10 +772,12 @@
 
       items.forEach(item => {
         item.addEventListener('click', () => addCocktail(item));
-        item.addEventListener('touchstart', (e) => {
-          e.preventDefault();
-          addCocktail(item);
-        });
+        item.addEventListener('touchstart', (e) => { e.preventDefault(); addCocktail(item); });
+      });
+
+      orderBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        alert(`총 ${getTotalCount()}잔을 주문했습니다! 잠시 후 준비됩니다.`);
       });
 
       loadBasket();
