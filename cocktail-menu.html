@@ -375,7 +375,9 @@
     /* ── Basket ── */
     .basket {
       display: flex;
-      align-items: flex-start;
+      flex-direction: column;
+      gap: 16px;
+      align-items: stretch;
     }
 
     .basket-card {
@@ -386,11 +388,9 @@
       padding: 24px;
       box-shadow: 0 16px 40px rgba(0, 0, 0, 0.18);
       backdrop-filter: blur(14px);
-      min-height: 360px;
+      min-height: 280px;
       display: flex;
       flex-direction: column;
-      position: sticky;
-      top: 24px;
     }
 
     .basket-header {
@@ -517,6 +517,138 @@
     }
 
     .order-btn.visible { display: block; }
+
+    /* ── History card ── */
+    .history-card {
+      width: 100%;
+      background: rgba(255, 255, 255, 0.025);
+      border: 1px solid rgba(255, 255, 255, 0.07);
+      border-radius: 24px;
+      padding: 22px 24px 20px;
+      backdrop-filter: blur(14px);
+    }
+
+    .history-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 16px;
+    }
+
+    .history-card h2 {
+      margin: 0;
+      font-size: 1.1rem;
+      font-weight: 700;
+      letter-spacing: 0.03em;
+      color: #e8eaf0;
+    }
+
+    .history-clear-btn {
+      background: none;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 999px;
+      color: rgba(255, 255, 255, 0.38);
+      font-size: 0.72rem;
+      padding: 3px 10px;
+      cursor: pointer;
+      font-family: inherit;
+      transition: color 0.2s, border-color 0.2s;
+      display: none;
+    }
+
+    .history-clear-btn:hover {
+      color: #ff6a80;
+      border-color: rgba(255, 106, 128, 0.35);
+    }
+
+    .history-clear-btn.visible { display: block; }
+
+    .history-empty {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+      padding: 24px 0 16px;
+      color: #5a6475;
+      font-size: 0.88rem;
+      text-align: center;
+    }
+
+    .history-empty-icon {
+      font-size: 1.8rem;
+      opacity: 0.4;
+      line-height: 1;
+    }
+
+    .history-empty.hidden { display: none !important; }
+
+    .history-list {
+      display: grid;
+      gap: 10px;
+      max-height: 420px;
+      overflow-y: auto;
+      scrollbar-width: thin;
+      scrollbar-color: rgba(255,255,255,0.1) transparent;
+    }
+
+    .history-list::-webkit-scrollbar { width: 4px; }
+    .history-list::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 4px; }
+
+    .history-order {
+      padding: 14px 16px;
+      border-radius: 18px;
+      background: rgba(255, 255, 255, 0.035);
+      border: 1px solid rgba(255, 255, 255, 0.07);
+      animation: fadeSlideIn 0.3s ease both;
+    }
+
+    .history-order-meta {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 10px;
+    }
+
+    .history-order-num {
+      font-size: 0.78rem;
+      font-weight: 700;
+      color: #a8adff;
+      letter-spacing: 0.06em;
+    }
+
+    .history-order-time {
+      font-size: 0.75rem;
+      color: rgba(255, 255, 255, 0.32);
+    }
+
+    .history-order-items {
+      display: grid;
+      gap: 5px;
+      margin-bottom: 10px;
+    }
+
+    .history-item-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 0.88rem;
+    }
+
+    .history-item-name { color: #d8dce8; }
+
+    .history-item-count {
+      color: rgba(255, 255, 255, 0.45);
+      font-weight: 600;
+      font-size: 0.82rem;
+    }
+
+    .history-order-total {
+      font-size: 0.78rem;
+      color: rgba(255, 255, 255, 0.28);
+      text-align: right;
+      border-top: 1px solid rgba(255, 255, 255, 0.06);
+      padding-top: 8px;
+    }
 
     /* ── Animations ── */
     @keyframes float {
@@ -678,6 +810,18 @@
           <div class="basket-items hidden" id="basketItems"></div>
           <button class="order-btn" id="orderBtn">주문하기</button>
         </div>
+
+        <div class="history-card">
+          <div class="history-header">
+            <h2>주문 내역</h2>
+            <button class="history-clear-btn" id="historyClearBtn">전체 삭제</button>
+          </div>
+          <div class="history-empty" id="historyEmpty">
+            <div class="history-empty-icon">📋</div>
+            <span>아직 주문 내역이 없습니다</span>
+          </div>
+          <div class="history-list" id="historyList"></div>
+        </div>
       </aside>
     </section>
 
@@ -687,9 +831,16 @@
       const basketItems = document.getElementById('basketItems');
       const totalBadge = document.getElementById('totalBadge');
       const orderBtn = document.getElementById('orderBtn');
-      const storageKey = 'cocktailBasket';
-      const basketData = {};
+      const historyEmpty = document.getElementById('historyEmpty');
+      const historyList = document.getElementById('historyList');
+      const historyClearBtn = document.getElementById('historyClearBtn');
 
+      const storageKey = 'cocktailBasket';
+      const historyKey = 'cocktailOrderHistory';
+      const basketData = {};
+      let orderHistory = [];
+
+      /* ── Basket ── */
       function saveBasket() {
         localStorage.setItem(storageKey, JSON.stringify(basketData));
       }
@@ -770,6 +921,81 @@
         updateItemStates();
       }
 
+      /* ── Order History ── */
+      function now() {
+        const d = new Date();
+        const hh = String(d.getHours()).padStart(2, '0');
+        const mm = String(d.getMinutes()).padStart(2, '0');
+        return `${hh}:${mm}`;
+      }
+
+      function saveHistory() {
+        localStorage.setItem(historyKey, JSON.stringify(orderHistory));
+      }
+
+      function renderHistory() {
+        historyList.innerHTML = '';
+        if (!orderHistory.length) {
+          historyEmpty.classList.remove('hidden');
+          historyClearBtn.classList.remove('visible');
+          return;
+        }
+
+        historyEmpty.classList.add('hidden');
+        historyClearBtn.classList.add('visible');
+
+        [...orderHistory].reverse().forEach(order => {
+          const el = document.createElement('div');
+          el.className = 'history-order';
+
+          const itemRows = Object.entries(order.items)
+            .map(([name, count]) => `
+              <div class="history-item-row">
+                <span class="history-item-name">${name}</span>
+                <span class="history-item-count">×${count}</span>
+              </div>`)
+            .join('');
+
+          el.innerHTML = `
+            <div class="history-order-meta">
+              <span class="history-order-num">#${order.id}</span>
+              <span class="history-order-time">${order.time}</span>
+            </div>
+            <div class="history-order-items">${itemRows}</div>
+            <div class="history-order-total">총 ${order.total}잔</div>
+          `;
+          historyList.appendChild(el);
+        });
+      }
+
+      function loadHistory() {
+        try {
+          orderHistory = JSON.parse(localStorage.getItem(historyKey) || '[]');
+        } catch { orderHistory = []; }
+        renderHistory();
+      }
+
+      function placeOrder() {
+        const snapshot = { ...basketData };
+        if (!Object.keys(snapshot).length) return;
+
+        const order = {
+          id: orderHistory.length + 1,
+          time: now(),
+          items: snapshot,
+          total: Object.values(snapshot).reduce((s, v) => s + v, 0),
+        };
+        orderHistory.push(order);
+        saveHistory();
+        renderHistory();
+
+        Object.keys(basketData).forEach(k => delete basketData[k]);
+        saveBasket();
+        renderBasket();
+        updateItemStates();
+      }
+
+      /* ── Event listeners ── */
       items.forEach(item => {
         item.addEventListener('click', () => addCocktail(item));
         item.addEventListener('touchstart', (e) => { e.preventDefault(); addCocktail(item); });
@@ -777,10 +1003,17 @@
 
       orderBtn.addEventListener('click', (e) => {
         e.stopPropagation();
-        alert(`총 ${getTotalCount()}잔을 주문했습니다! 잠시 후 준비됩니다.`);
+        placeOrder();
+      });
+
+      historyClearBtn.addEventListener('click', () => {
+        orderHistory = [];
+        saveHistory();
+        renderHistory();
       });
 
       loadBasket();
+      loadHistory();
     </script>
   </article>
 </body>
