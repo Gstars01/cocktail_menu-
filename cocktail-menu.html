@@ -21,7 +21,7 @@
       display: flex;
       align-items: flex-start;
       justify-content: center;
-      padding: 48px 24px 64px;
+      padding: 32px 16px 48px;
       background:
         radial-gradient(ellipse at top, rgba(84, 115, 226, 0.18), transparent 42%),
         radial-gradient(ellipse at bottom left, rgba(255, 96, 140, 0.12), transparent 36%),
@@ -30,7 +30,7 @@
     }
 
     .menu-card {
-      width: min(100%, 980px);
+      width: min(100%, 1600px);
       margin-top: 32px;
       background: rgba(12, 18, 32, 0.97);
       border: 1px solid rgba(255, 255, 255, 0.09);
@@ -106,22 +106,24 @@
     /* ── Layout ── */
     .menu-body {
       display: grid;
-      grid-template-columns: minmax(0, 1.5fr) minmax(260px, 1fr);
-      gap: 28px;
-      padding: 28px 32px 36px;
+      grid-template-columns: minmax(0, 1fr) minmax(300px, 340px);
+      gap: 32px;
+      padding: 28px 36px 40px;
     }
 
     .menu-list {
       display: grid;
+      grid-template-columns: repeat(4, 1fr);
       gap: 18px;
     }
 
     /* ── Item card ── */
     .item {
-      display: grid;
-      grid-template-columns: 140px 1fr;
-      gap: 22px;
-      padding: 20px 22px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 16px;
+      padding: 22px 18px 20px;
       border-radius: 24px;
       background: rgba(255, 255, 255, 0.028);
       border: 1px solid rgba(255, 255, 255, 0.07);
@@ -142,6 +144,9 @@
     .item:nth-child(3) { animation-delay: 0.19s; }
     .item:nth-child(4) { animation-delay: 0.26s; }
     .item:nth-child(5) { animation-delay: 0.33s; }
+    .item:nth-child(6) { animation-delay: 0.40s; }
+    .item:nth-child(7) { animation-delay: 0.47s; }
+    .item:nth-child(8) { animation-delay: 0.54s; }
 
     .item::before {
       content: "";
@@ -287,12 +292,37 @@
     .glass-woo .straw  { background: linear-gradient(180deg, #ff9bb5 0%, #ffcad7 100%); }
     .glass-woo .garnish{ background: radial-gradient(circle at 30% 30%, #ffdce6 0%, #ff9cb3 70%); }
 
+    .glass-orange-crush .liquid { background: linear-gradient(180deg, #ffe07a 0%, #ff9020 55%, #e85c00 100%); }
+    .glass-orange-crush .straw  { background: linear-gradient(180deg, #ffb84a 0%, #ff6a00 100%); }
+    .glass-orange-crush .garnish{ background: radial-gradient(circle at 30% 30%, #fff4cc 0%, #ffb340 65%); }
+
+    .glass-virgin-cosmo .liquid { background: linear-gradient(180deg, #ffb3c8 0%, #ff5f80 50%, #c0395a 100%); }
+    .glass-virgin-cosmo .straw  { background: linear-gradient(180deg, #ffb0c8 0%, #ff7096 100%); }
+    .glass-virgin-cosmo .garnish{ background: radial-gradient(circle at 30% 30%, #ffe4ed 0%, #ff8faa 70%); }
+
+    .glass-bartender .liquid { background: linear-gradient(180deg, #a8f0dc 0%, #20c99a 45%, #0a7a62 100%); }
+    .glass-bartender .straw  { background: linear-gradient(180deg, #6edfc0 0%, #0fa882 100%); }
+    .glass-bartender .garnish{ background: radial-gradient(circle at 30% 30%, #d6fff3 0%, #5edbb8 70%); }
+
+    .badge-special {
+      background: linear-gradient(135deg, rgba(30, 180, 140, 0.26), rgba(80, 220, 180, 0.18));
+      color: #6edfc0;
+      border-color: rgba(60, 200, 160, 0.38);
+      animation: specialPulse 2.8s ease-in-out infinite;
+    }
+
+    @keyframes specialPulse {
+      0%, 100% { opacity: 1; }
+      50%       { opacity: 0.65; }
+    }
+
     /* ── Item content ── */
-    .item-content { min-width: 0; }
+    .item-content { min-width: 0; width: 100%; text-align: center; }
 
     .item-header {
       display: flex;
       align-items: baseline;
+      justify-content: center;
       gap: 10px;
       flex-wrap: wrap;
       margin-bottom: 8px;
@@ -336,6 +366,7 @@
     .item-footer {
       display: flex;
       align-items: center;
+      justify-content: center;
       gap: 10px;
       flex-wrap: wrap;
     }
@@ -692,21 +723,16 @@
         padding: 20px 20px 28px;
       }
 
+      .menu-list {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
       .basket { order: -1; }
 
       .basket-card {
         position: static;
         min-height: auto;
       }
-
-      .item {
-        grid-template-columns: 1fr;
-        text-align: center;
-      }
-
-      .item-image { margin: 0 auto; }
-      .item-content { text-align: left; }
-      .item-header { justify-content: flex-start; }
     }
   </style>
 </head>
@@ -813,6 +839,69 @@
             <p>보드카와 복숭아 슈냅스, 크랜베리 주스가 어우러진 달콤하고 상큼한 칵테일입니다. 부드러운 복숭아 향과 새콤한 크랜베리가 조화를 이루는 매력적인 한 잔.</p>
             <div class="item-footer">
               <span class="alc-badge"><span class="alc-dot"></span>알코올 15%</span>
+              <span class="item-count-badge"></span>
+            </div>
+          </div>
+        </article>
+
+        <article class="item"
+          style="--accent:#ffaa40;--accent-border:rgba(255,170,64,0.26);--accent-glow:rgba(255,140,20,0.12)"
+          data-name="오렌지 크러쉬" data-alc="8%">
+          <div class="item-image">
+            <div class="glass glass-orange-crush">
+              <div class="liquid"></div><div class="straw"></div><div class="garnish"></div>
+              <div class="bubble bubble-1"></div><div class="bubble bubble-2"></div><div class="bubble bubble-3"></div>
+            </div>
+          </div>
+          <div class="item-content">
+            <div class="item-header"><h2>오렌지 크러쉬</h2></div>
+            <p>새콤 상큼하고 달달한 오렌지 맛으로 도수가 낮아 가볍게 즐기기 좋은 칵테일입니다. 탄산의 청량감이 더해져 더욱 상쾌한 한 잔.</p>
+            <div class="item-footer">
+              <span class="alc-badge"><span class="alc-dot"></span>알코올 8%</span>
+              <span class="item-count-badge"></span>
+            </div>
+          </div>
+        </article>
+
+        <article class="item"
+          style="--accent:#3ecfaa;--accent-border:rgba(62,207,170,0.30);--accent-glow:rgba(20,180,140,0.14)"
+          data-name="바텐더 스페셜" data-alc="?">
+          <div class="item-image">
+            <div class="glass glass-bartender">
+              <div class="liquid"></div><div class="straw"></div><div class="garnish"></div>
+              <div class="bubble bubble-1"></div><div class="bubble bubble-2"></div><div class="bubble bubble-3"></div>
+            </div>
+          </div>
+          <div class="item-content">
+            <div class="item-header">
+              <h2>바텐더 스페셜</h2>
+              <span class="badge badge-special">BARTENDER'S PICK</span>
+            </div>
+            <p>오늘 바텐더가 마음대로 만들어드리는 한 잔입니다. 재료도, 맛도, 색깔도 열어보기 전까지는 아무도 모릅니다. 믿고 맡겨보세요.</p>
+            <div class="item-footer">
+              <span class="alc-badge"><span class="alc-dot"></span>도수 미정</span>
+              <span class="item-count-badge"></span>
+            </div>
+          </div>
+        </article>
+
+        <article class="item"
+          style="--accent:#ff7fa0;--accent-border:rgba(255,127,160,0.26);--accent-glow:rgba(255,80,120,0.12)"
+          data-name="버진 코스모폴리탄" data-alc="0%">
+          <div class="item-image">
+            <div class="glass glass-virgin-cosmo">
+              <div class="liquid"></div><div class="straw"></div><div class="garnish"></div>
+              <div class="bubble bubble-1"></div><div class="bubble bubble-2"></div><div class="bubble bubble-3"></div>
+            </div>
+          </div>
+          <div class="item-content">
+            <div class="item-header">
+              <h2>버진 코스모폴리탄</h2>
+              <span class="badge badge-nonalc">NON-ALC</span>
+            </div>
+            <p>크랜베리 주스와 라임 주스, 오렌지 주스를 블렌딩한 무알코올 칵테일입니다. 코스모폴리탄의 새콤달콤한 풍미를 알코올 없이 누구나 즐길 수 있습니다.</p>
+            <div class="item-footer">
+              <span class="alc-badge"><span class="alc-dot" style="background:#7ed4a0"></span>무알코올</span>
               <span class="item-count-badge"></span>
             </div>
           </div>
